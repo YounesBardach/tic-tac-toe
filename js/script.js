@@ -16,10 +16,29 @@ const gameboard = (() => {
   const emptyPositions = () => {
     return positions.filter((position) => position.textContent == "");
   };
-  const render = () => {
-    positions.map((position) => position.classList.add("border"));
+  const renderBoard = () => {
+    let indexes = [0, 1, 3, 4, 6, 7];
+    positions.map((position) => {
+      if (positions.indexOf(position) < 6) {
+        position.classList.remove("transop-btb");
+      }
+      if (indexes.includes(positions.indexOf(position))) {
+        position.classList.remove("transop-rb");
+      }
+    });
+    let show = () => {
+      positions.map((position) => {
+        if (positions.indexOf(position) < 6) {
+          position.classList.add("transop-btb");
+        }
+        if (indexes.includes(positions.indexOf(position))) {
+          position.classList.add("transop-rb");
+        }
+      });
+    };
+    setTimeout(show, 200);
   };
-  return { positions, lines, emptyPositions, render };
+  return { positions, lines, emptyPositions, renderBoard };
 })();
 
 const player = (name, mark, difficulty = "human") => {
@@ -143,38 +162,6 @@ const player = (name, mark, difficulty = "human") => {
 
 const players = {};
 
-const dom = (() => {
-  const playerOneInput = document.querySelector("#player-one");
-  const playerTwoInput = document.querySelector("#player-two");
-  const AI = document.querySelector(".AI");
-  const noob = document.querySelector(".noob");
-  const average = document.querySelector(".average");
-  const machineGod = document.querySelector(".machine-god");
-  const resultDisplay = document.querySelector(".result");
-  const startBUtton = document.querySelector(".start");
-
-  startBUtton.addEventListener("click", () => {
-    gameboard.render();
-    startBUtton.textContent = "Restart";
-    gameboard.positions.map((position) => position.click());
-    players.playerOne = player(playerOneInput.value, "X");
-    if (AI.selected) {
-      if (noob.selected) {
-        players.playerTwo = player(AI.value, "O", "noob");
-      } else if (average.selected) {
-        players.playerTwo = player(AI.value, "O", "average");
-      } else if (machineGod.selected) {
-        players.playerTwo = player(AI.value, "O", "machine-god");
-      }
-    } else {
-      players.playerTwo = player(playerTwoInput.value, "O");
-    }
-    game.play(players.playerOne);
-  });
-
-  return {resultDisplay}
-})();
-
 const game = (() => {
   const checkWinner = () => {
     for (let i = 0; i < 8; i++) {
@@ -200,22 +187,31 @@ const game = (() => {
     let winner = checkWinner();
     if (winner == 0) {
       dom.resultDisplay.textContent = "Draw";
+      dom.resultDisplay.classList.add("result-show");
       return 1;
     }
     if (winner == 1) {
       dom.resultDisplay.textContent = `Tic Tac, Toe, three in a row! Winner: ${players.playerTwo.name}`;
+      dom.resultDisplay.classList.add("result-show");
+      dom.playerTwoDisplay.classList.add("winner");
       return 1;
     }
     if (winner == -1) {
       dom.resultDisplay.textContent = `Tic Tac, Toe, three in a row! Winner: ${players.playerOne.name}`;
+      dom.resultDisplay.classList.add("result-show");
+      dom.playerOneDisplay.classList.add("winner");
       return 1;
     }
   };
 
   const wipeScore = () => {
     dom.resultDisplay.textContent = "";
+    dom.resultDisplay.classList.remove("result-show");
+    dom.playerOneDisplay.classList.remove("winner");
+    dom.playerTwoDisplay.classList.remove("winner");
     gameboard.positions.map((position) => {
       position.textContent = "";
+      position.classList.remove("xmark-one", "omark-one");
     });
   };
 
@@ -234,6 +230,11 @@ const game = (() => {
           return;
         }
         position.textContent = `${player.mark}`;
+        if (position.textContent == "X") {
+          position.classList.add("xmark-one");
+        } else {
+          position.classList.add("omark-one");
+        }
         let winner = displayWinner();
         if (winner) {
           return;
@@ -259,4 +260,64 @@ const game = (() => {
     });
   };
   return { play, checkWinner };
+})();
+
+const dom = (() => {
+  const playerOneInput = document.querySelector("#player-one");
+  const playerOneDisplay = document.querySelector(".player-one");
+  const playerTwoInput = document.querySelector("#player-two");
+  const playerTwoDisplay = document.querySelector(".player-two");
+  const AI = document.querySelector(".AI");
+  const noob = document.querySelector(".noob");
+  const average = document.querySelector(".average");
+  const machineGod = document.querySelector(".machine-god");
+  const resultDisplay = document.querySelector(".result");
+  const startBUtton = document.querySelector(".start");
+
+  startBUtton.addEventListener("click", () => {
+    gameboard.renderBoard();
+    startBUtton.textContent = "Restart";
+    gameboard.positions.map((position) => position.click());
+    players.playerOne = player(playerOneInput.value, "X");
+    playerOneDisplay.textContent = playerOneInput.value;
+    playerTwoDisplay.textContent = "";
+    if (AI.selected) {
+      if (noob.selected) {
+        playerTwoInput.value = "Noob-RX";
+        players.playerTwo = player(playerTwoInput.value, "O", "noob");
+      } else if (average.selected) {
+        playerTwoInput.value = "Average-ultra";
+        players.playerTwo = player(playerTwoInput.value, "O", "average");
+      } else if (machineGod.selected) {
+        playerTwoInput.value = "Deus Ex Machina";
+        players.playerTwo = player(playerTwoInput.value, "O", "machine-god");
+      }
+      playerTwoInput.value = "";
+    } else {
+      players.playerTwo = player(playerTwoInput.value, "O");
+      playerTwoDisplay.textContent = playerTwoInput.value;
+    }
+    playerOneDisplay.classList.remove("transop-pone");
+    playerTwoDisplay.classList.remove(
+      "transop-ptwo",
+      "player-noob",
+      "player-average",
+      "player-deus"
+    );
+    let show = () => {
+      playerOneDisplay.classList.add("transop-pone");
+      playerTwoDisplay.classList.add("transop-ptwo");
+      if (players.playerTwo.name == "Noob-RX") {
+        playerTwoDisplay.classList.add("player-noob");
+      } else if (players.playerTwo.name == "Average-ultra") {
+        playerTwoDisplay.classList.add("player-average");
+      } else if (players.playerTwo.name == "Deus Ex Machina") {
+        playerTwoDisplay.classList.add("player-deus");
+      }
+    };
+    setTimeout(show, 200);
+    game.play(players.playerOne);
+  });
+
+  return { resultDisplay, playerOneDisplay, playerTwoDisplay };
 })();

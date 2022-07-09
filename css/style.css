@@ -97,26 +97,86 @@
 
 body {
   font-size: var(--font-size--default);
+  word-break: break-all;
   min-height: 100vh;
 }
 
-.border {
-  border: 1px solid black;
+.gray-rounded {
+  border: none;
+  border-bottom: 2px solid gray;
+  border-radius: 5px;
+}
+
+.shadow {
+  border: none;
+  padding: 0.5rem;
+}
+
+.shadow:active {
+  box-shadow: inset 1px 2px 5px gray;
+  transform: translateX(1px) translateY(1px);
+  background-color: #e5e5e5;
+}
+
+.btb,
+.rb {
+  opacity: 0;
+}
+
+.btb {
+  border-bottom: 5px solid gray;
+}
+
+.rb {
+  border-right: 5px solid gray;
+}
+
+.transop-btb,
+.transop-rb {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
 }
 
 .container {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
   min-height: inherit;
+  padding: 1rem;
+}
+
+.display-container {
+  display: grid;
 }
 
 .display {
-display: grid;
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 3px solid gray;
+  border-radius: 10px;
+  background-color: bisque;
+  box-shadow: 5px 5px 5px lightgray;
+  margin-bottom: 2rem;
+}
+
+.game-container {
+  display: grid;
 }
 
 .game {
-  grid-template-columns: 1fr 1fr 1fr;
+  min-height: 60vh;
   display: grid;
+  grid-template-columns: repeat(3, 300px);
+  grid-template-rows: 300px;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  padding: 1rem;
+  background-color: azure;
+  box-shadow: 5px 5px 5px lightgrey;
 }
 
 .game-container {
@@ -126,5 +186,101 @@ display: grid;
 
 .gameboard {
   display: grid;
-  grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+  grid-template: repeat(3, 100px) / repeat(3, 100px);
+  font-size: 0;
 }
+
+.player-one,
+.player-two {
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  font-size: 2.6rem;
+  font-weight: bold;
+  text-align: center;
+  height: 80%;
+  width: 80%;
+  opacity: 0;
+  border-radius: 50%;
+  border: 1px solid gray;
+  padding: 0.5rem;
+}
+
+.player-one {
+  color: blue;
+}
+
+.player-two {
+  color: red;
+}
+
+.player-noob,
+.player-average,
+.player-deus {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.player-noob {
+  background-image: url(../img/noob-rx.jpg);
+}
+
+.player-average {
+  background-image: url(../img/average-ultra.jpg);
+  background-position: 53%;
+}
+
+.player-deus {
+  background-image: url(../img/deus-ex-machina.jpg);
+  background-position: 90%;
+}
+
+.transop-pone,
+.transop-ptwo {
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
+}
+
+.xmark-zero,
+.omark-zero {
+  background-position: 50%;
+  background-size: 0;
+  background-repeat: no-repeat;
+}
+
+.xmark-one,
+.omark-one {
+  background-size: 80%;
+  transition: background-size 0.5s ease-in-out;
+}
+
+.xmark-one {
+  background-image: url(../img/xmark.svg);
+}
+
+.omark-one {
+  background-image: url(../img/omark.svg);
+}
+
+.result {
+  display: none;
+  background-color: azure;
+  border-style: outset;
+  border-radius: 5px;
+  padding: 0.5rem;
+}
+
+.result-show {
+  display: block;
+}
+
+.winner {
+  border: 5px solid #e1c634;
+  transition: border 1s ease-in-out;
+}
+
+/* Attributions:
+Photo by Kindel Media: https://www.pexels.com/photo/a-technological-advance-robotic-sensor-9028867/
+Photo by Pavel Danilyuk: https://www.pexels.com/photo/close-up-shot-of-white-robot-toy-8294606/
+Green Digital Text On A Person by Scopio from NounProject.com
+*/
