@@ -191,13 +191,13 @@ const game = (() => {
       return 1;
     }
     if (winner == 1) {
-      dom.resultDisplay.textContent = `Tic Tac, Toe, three in a row! Winner: ${players.playerTwo.name}`;
+      dom.resultDisplay.textContent = `Winner: ${players.playerTwo.name}`;
       dom.resultDisplay.classList.add("result-show");
       dom.playerTwoDisplay.classList.add("winner");
       return 1;
     }
     if (winner == -1) {
-      dom.resultDisplay.textContent = `Tic Tac, Toe, three in a row! Winner: ${players.playerOne.name}`;
+      dom.resultDisplay.textContent = `Winner: ${players.playerOne.name}`;
       dom.resultDisplay.classList.add("result-show");
       dom.playerOneDisplay.classList.add("winner");
       return 1;
