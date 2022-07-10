@@ -269,6 +269,7 @@ body {
   border-style: outset;
   border-radius: 5px;
   padding: 0.5rem;
+  font-size: var(--font-size--large);
 }
 
 .result-show {
